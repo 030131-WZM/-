@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小铭的专属浏览器 - GitHub Desktop部署指南</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.3em;
+        }
+        
+        .progress-bar {
+            background: #f0f0f0;
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .method-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #28a745;
+        }
+        
+        .method-card h3 {
+            color: #28a745;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+        
+        .method-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .advantages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .advantage-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border-left: 3px solid #28a745;
+        }
+        
+        .advantage-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .advantage-title {
+            font-weight: 600;
+            color: #28a745;
+            margin-bottom: 5px;
+        }
+        
+        .advantage-desc {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .step-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .step-section.active {
+            border: 2px solid #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 15px;
+        }
+        
+        .step-title {
+            font-size: 1.5em;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .step-content {
+            line-height: 1.6;
+            color: #666;
+        }
+        
+        .step-actions {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 5px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #28a745;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        
+        .screenshot {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+            border: 2px dashed #ddd;
+        }
+        
+        .screenshot-placeholder {
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .file-list {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        
+        .file-icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        .file-name {
+            flex: 1;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        .file-size {
+            color: #666;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .tips {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tips h4 {
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+        
+        .tips ul {
+            margin-left: 20px;
+            color: #1976d2;
+        }
+        
+        .tips li {
+            margin-bottom: 5px;
+        }
+        
+        .completion-section {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+            display: none;
+        }
+        
+        .completion-section h3 {
+            color: #155724;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+        
+        .completion-section p {
+            color: #155724;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+        
+        .url-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .url-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .url-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .url-display {
+            background: #f1f3f4;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        
+        .download-section {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .download-section h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .download-section p {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .btn {
+                display: block;
+                margin: 10px auto;
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖥️ 小铭的专属浏览器 - GitHub Desktop部署指南</h1>
+            <p>使用GitHub Desktop进行图形化部署，无需命令行操作</p>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+        </div>
+        
+        <!-- GitHub Desktop优势 -->
+        <div class="method-card">
+            <h3>🎯 GitHub Desktop部署优势</h3>
+            <p>GitHub Desktop是GitHub官方提供的图形化工具，让你无需记住复杂的命令，通过点击鼠标即可完成代码部署。</p>
+            
+            <div class="advantages">
+                <div class="advantage-item">
+                    <div class="advantage-icon">🖱️</div>
+                    <div class="advantage-title">图形界面</div>
+                    <div class="advantage-desc">直观的图形界面，操作简单</div>
+                </div>
+                
+                <div class="advantage-item">
+                    <div class="advantage-icon">🚀</div>
+                    <div class="advantage-title">快速部署</div>
+                    <div class="advantage-desc">几步操作即可完成部署</div>
+                </div>
+                
+                <div class="advantage-item">
+                    <div class="advantage-icon">🔒</div>
+                    <div class="advantage-title">安全可靠</div>
+                    <div class="advantage-desc">官方工具，稳定可靠</div>
+                </div>
+                
+                <div class="advantage-item">
+                    <div class="advantage-icon">📱</div>
+                    <div class="advantage-title">跨平台</div>
+                    <div class="advantage-desc">支持Windows、Mac、Linux</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 下载GitHub Desktop -->
+        <div class="download-section">
+            <h3>📥 第0步：下载GitHub Desktop</h3>
+            <p>这是使用GitHub Desktop部署的第一步，需要先下载并安装官方工具</p>
+            
+            <div class="step-actions">
+                <button class="btn btn-warning" onclick="window.open('https://desktop.github.com/', '_blank')">🌐 下载GitHub Desktop</button>
+                <button class="btn btn-success" onclick="completeStep(0)">✅ 已下载完成</button>
+            </div>
+        </div>
+        
+        <!-- 步骤1：安装和登录 -->
+        <div class="step-section active" id="step1">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <div class="step-title">安装并登录GitHub Desktop</div>
+            </div>
+            
+            <div class="step-content">
+                <p>下载完成后，安装GitHub Desktop并登录你的GitHub账户。</p>
+                
+                <div class="screenshot">
+                    <div class="screenshot-placeholder">
+                        📸 <strong>截图位置：</strong>GitHub Desktop登录界面
+                    </div>
+                </div>
+                
+                <div class="tips">
+                    <h4>📝 详细步骤：</h4>
+                    <ul>
+                        <li>运行下载的GitHub Desktop安装程序</li>
+                        <li>按照安装向导完成安装</li>
+                        <li>启动GitHub Desktop</li>
+                        <li>使用你的GitHub账户登录</li>
+                        <li>如果还没有GitHub账户，需要先注册</li>
+                    </ul>
+                </div>
+                
+                <div class="step-actions">
+                    <button class="btn btn-success" onclick="completeStep(1)">✅ 完成此步骤</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 步骤2：添加本地仓库 -->
+        <div class="step-section" id="step2">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <div class="step-title">添加本地仓库</div>
+            </div>
+            
+            <div class="step-content">
+                <p>将deploy文件夹添加为本地Git仓库。</p>
+                
+                <div class="screenshot">
+                    <div class="screenshot-placeholder">
+                        📸 <strong>截图位置：</strong>GitHub Desktop → File → Add Local Repository
+                    </div>
+                </div>
+                
+                <div class="tips">
+                    <h4>📝 详细步骤：</h4>
+                    <ul>
+                        <li>在GitHub Desktop中点击 <strong>File</strong> → <strong>Add Local Repository</strong></li>
+                        <li>选择 <strong>Choose...</strong> 按钮</li>
+                        <li>导航到并选择 <strong>deploy文件夹</strong></li>
+                        <li>点击 <strong>Add Repository</strong></li>
+                        <li>在Commit message框中输入：<strong>Initial commit</strong></li>
+                    </ul>
+                </div>
+                
+                <div class="step-actions">
+                    <button class="btn" onclick="window.open('deploy', '_blank')">📁 打开deploy文件夹</button>
+                    <button class="btn btn-success" onclick="completeStep(2)">✅ 完成此步骤</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 步骤3：发布仓库 -->
+        <div class="step-section" id="step3">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <div class="step-title">发布到GitHub</div>
+            </div>
+            
+            <div class="step-content">
+                <p>将本地仓库发布到GitHub，创建新的公开仓库。</p>
+                
+                <div class="screenshot">
+                    <div class="screenshot-placeholder">
+                        📸 <strong>截图位置：</strong>GitHub Desktop → Publish repository
+                    </div>
+                </div>
+                
+                <div class="tips">
+                    <h4>📝 详细步骤：</h4>
+                    <ul>
+                        <li>在GitHub Desktop中点击 <strong>Publish repository</strong></li>
+                        <li>Repository name：<strong>xiaoming-browser</strong></li>
+                        <li>描述：<strong>小铭的专属浏览器</strong></li>
+                        <li>选择 <strong>Public</strong>（公开仓库）</li>
+                        <li>不要勾选 "Initialize with README"</li>
+                        <li>点击 <strong>Publish repository</strong></li>
+                    </ul>
+                </div>
+                
+                <div class="step-actions">
+                    <button class="btn btn-success" onclick="completeStep(3)">✅ 完成此步骤</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 步骤4：推送代码 -->
+        <div class="step-section" id="step4">
+            <div class="step-header">
+                <div class="step-number">4</div>
+                <div class="step-title">推送代码</div>
+            </div>
+            
+            <div class="step-content">
+                <p>将本地代码推送到GitHub远程仓库。</p>
+                
+                <div class="screenshot">
+                    <div class="screenshot-placeholder">
+                        📸 <strong>截图位置：</strong>GitHub Desktop → Push origin
+                    </div>
+                </div>
+                
+                <div class="tips">
+                    <h4>📝 详细步骤：</h4>
+                    <ul>
+                        <li>在GitHub Desktop中确认所有文件都显示在左侧</li>
+                        <li>Commit message：<strong>Initial commit</strong></li>
+                        <li>点击 <strong>Commit to main</strong></li>
+                        <li>点击 <strong>Push origin</strong> 按钮</li>
+                        <li>等待推送完成</li>
+                    </ul>
+                </div>
+                
+                <div class="step-actions">
+                    <button class="btn btn-success" onclick="completeStep(4)">✅ 完成此步骤</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 步骤5：启用GitHub Pages -->
+        <div class="step-section" id="step5">
+            <div class="step-header">
+                <div class="step-number">5</div>
+                <div class="step-title">启用GitHub Pages</div>
+            </div>
+            
+            <div class="step-content">
+                <p>启用GitHub Pages服务，让网站可以通过互联网访问。</p>
+                
+                <div class="screenshot">
+                    <div class="screenshot-placeholder">
+                        📸 <strong>截图位置：</strong>GitHub仓库 → Settings → Pages
+                    </div>
+                </div>
+                
+                <div class="tips">
+                    <h4>📝 详细步骤：</h4>
+                    <ul>
+                        <li>在浏览器中访问你的GitHub仓库：<a href="https://github.com/030131-WZM/-" target="_blank" style="color: #2196f3;">https://github.com/030131-WZM/-</a></li>
+                        <li>点击 <strong>Settings</strong></li>
+                        <li>在左侧菜单中找到 <strong>Pages</strong> 选项</li>
+                        <li>在Source部分选择 <strong>Deploy from a branch</strong></li>
+                        <li>Branch选择 <strong>main</strong></li>
+                        <li>文件夹选择 <strong>/ (root)</strong></li>
+                        <li>点击 <strong>Save</strong></li>
+                    </ul>
+                </div>
+                
+                <div class="step-actions">
+                    <button class="btn btn-success" onclick="completeStep(5)">✅ 完成此步骤</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 完成页面 -->
+        <div class="completion-section" id="completionSection">
+            <h3>🎉 恭喜！部署完成！</h3>
+            <p>你的专属浏览器已成功部署到GitHub Pages</p>
+            
+            <div class="url-grid">
+                <div class="url-card">
+                    <h4>🌐 主浏览器</h4>
+                    <div class="url-display">https://030131-wzm.github.io/-/</div>
+                    <button class="btn" onclick="window.open('https://030131-wzm.github.io/-/', '_blank')">🔗 立即访问</button>
+                </div>
+                
+                <div class="url-card">
+                    <h4>📱 移动端版本</h4>
+                    <div class="url-display">https://030131-wzm.github.io/-/mobile.html</div>
+                    <button class="btn btn-success" onclick="window.open('https://030131-wzm.github.io/-/mobile.html', '_blank')">📱 移动端访问</button>
+                </div>
+            </div>
+            
+            <div class="tips">
+                <h4>📱 安卓端使用方法：</h4>
+                <ul>
+                    <li>在浏览器中直接访问上述地址</li>
+                    <li>点击浏览器菜单（⋮）→ "添加到主屏幕"</li>
+                    <li>像APP一样使用，无需安装</li>
+                    <li>支持所有主流搜索引擎</li>
+                    <li>完全免费，无广告</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentStep = 0;
+        const totalSteps = 5;
+        
+        function completeStep(step) {
+            currentStep = step;
+            updateProgress();
+            
+            // 隐藏当前步骤
+            if (step > 0) {
+                document.getElementById('step' + step).classList.remove('active');
+            }
+            
+            if (step < totalSteps) {
+                // 显示下一步
+                document.getElementById('step' + (step + 1)).classList.add('active');
+                document.getElementById('step' + (step + 1)).scrollIntoView({ behavior: 'smooth' });
+            } else {
+                // 显示完成页面
+                document.getElementById('completionSection').style.display = 'block';
+                document.getElementById('completionSection').scrollIntoView({ behavior: 'smooth' });
+                
+                // 显示成功消息
+                setTimeout(() => {
+                    alert('🎉 恭喜！部署完成！\n\n你的专属浏览器现在可以在安卓设备上访问了！\n\n访问地址：\nhttps://030131-wzm.github.io/-/\n\n📱 安卓端使用方法：\n1. 直接访问上述地址\n2. 点击浏览器菜单（⋮）→ "添加到主屏幕"\n3. 像APP一样使用');
+                }, 1000);
+            }
+        }
+        
+        function updateProgress() {
+            const progress = ((currentStep + 1) / (totalSteps + 1)) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+        
+        // 页面加载时初始化
+        window.onload = function() {
+            updateProgress();
+        };
+    </script>
+</body>
+</html>
