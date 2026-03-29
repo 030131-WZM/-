@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小铭的专属浏览器 - 临时访问页面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.2em;
+        }
+        
+        .status-card {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .status-card h3 {
+            color: #856404;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .status-card p {
+            color: #856404;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .access-section {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .access-section h3 {
+            color: #155724;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .url-list {
+            text-align: left;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .url-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .url-item h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        .url-item p {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        
+        .url-display {
+            background: #f1f3f4;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+            color: #333;
+            word-break: break-all;
+            margin-top: 8px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-success {
+            background: #28a745;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .deploy-guide {
+            background: #e3f2fd;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .deploy-guide h3 {
+            color: #1976d2;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .deploy-guide ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .deploy-guide li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .deploy-guide .highlight {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .url-list {
+                text-align: center;
+            }
+            
+            .btn {
+                display: block;
+                margin: 10px auto;
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌍 小铭的专属浏览器</h1>
+            <p>临时访问页面 - 部署完成后即可正常使用</p>
+        </div>
+        
+        <div class="status-card">
+            <h3>📋 当前状态</h3>
+            <p>✅ 浏览器文件已准备完成</p>
+            <p>✅ GitHub仓库已创建：https://github.com/030131-WZM/-</p>
+            <p>⏳ 正在等待部署到GitHub Pages</p>
+            <p>📱 安卓端访问功能已准备就绪</p>
+        </div>
+        
+        <div class="access-section">
+            <h3>🔗 访问地址</h3>
+            <div class="url-list">
+                <div class="url-item">
+                    <h4>🌐 主浏览器</h4>
+                    <p>完整功能的专属浏览器</p>
+                    <div class="url-display">https://030131-wzm.github.io/-/</div>
+                </div>
+                
+                <div class="url-item">
+                    <h4>📱 移动端版本</h4>
+                    <p>专为移动设备优化的版本</p>
+                    <div class="url-display">https://030131-wzm.github.io/-/mobile.html</div>
+                </div>
+                
+                <div class="url-item">
+                    <h4>🔗 GitHub仓库</h4>
+                    <p>源代码和部署信息</p>
+                    <div class="url-display">https://github.com/030131-WZM/-</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="deploy-guide">
+            <h3>🚀 快速部署完成指南</h3>
+            <ol>
+                <li><strong>推送代码到GitHub</strong></li>
+                <div class="highlight">
+                    打开命令提示符，执行：<br>
+                    cd C:\Users\90760\.openclaw\workspaceopenclaw config\deploy<br>
+                    git push -u origin main
+                </div>
+                
+                <li><strong>启用GitHub Pages</strong></li>
+                <div class="highlight">
+                    访问：https://github.com/030131-WZM/-<br>
+                    点击 Settings → Pages → 选择 main 分支 → Save
+                </div>
+                
+                <li><strong>等待部署完成</strong></li>
+                <div class="highlight">
+                    通常需要1-5分钟，页面会显示部署状态
+                </div>
+                
+                <li><strong>测试访问</strong></li>
+                <div class="highlight">
+                    访问：https://030131-wzm.github.io/-/<br>
+                    确认页面正常显示
+                </div>
+            </ol>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn" onclick="window.open('https://030131-wzm.github.io/-/', '_blank')">🌐 访问浏览器</button>
+            <button class="btn btn-secondary" onclick="window.open('https://github.com/030131-WZM/-', '_blank')">📁 查看源码</button>
+            <button class="btn btn-success" onclick="window.open('GitHub Token部署指南.bat', '_blank')">📖 部署指南</button>
+        </div>
+    </div>
+    
+    <script>
+        // 检查页面是否在GitHub Pages上运行
+        function checkDeploymentStatus() {
+            const currentUrl = window.location.href;
+            const githubPagesPattern = /github\.io/;
+            
+            if (githubPagesPattern.test(currentUrl)) {
+                console.log('✅ 已在GitHub Pages上运行');
+                // 可以在这里添加更多部署成功后的功能
+            } else {
+                console.log('📋 本地测试模式');
+            }
+        }
+        
+        // 页面加载时检查
+        window.onload = function() {
+            checkDeploymentStatus();
+        };
+    </script>
+</body>
+</html>
