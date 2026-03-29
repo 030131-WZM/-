@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小铭的专属浏览器 - 二维码</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1em;
+        }
+        
+        .qr-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid #f0f0f0; /* 添加边框提高识别度 */
+        }
+        
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 220px;
+        }
+        
+        .url-display {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 5px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .instructions {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .instructions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .instructions li:before {
+            content: "📱";
+            position: absolute;
+            left: 0;
+        }
+        
+        /* 兼容性增强样式 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            #qrcode canvas {
+                max-width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌍 小铭的专属浏览器</h1>
+            <p>扫描二维码随时随地访问</p>
+        </div>
+        
+        <div class="qr-container">
+            <div id="qrcode">
+                <div style="text-align: center; color: #999;">
+                    <div style="font-size: 48px; margin-bottom: 10px;">📱</div>
+                    <div>正在生成二维码...</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="url-display" id="urlDisplay">
+            https://xiaoming-browser.github.io/
+        </div>
+        
+        <div>
+            <button class="btn" onclick="downloadQR()">📥 下载二维码</button>
+            <button class="btn btn-secondary" onclick="shareQR()">📤 分享二维码</button>
+        </div>
+        
+        <div class="instructions">
+            <h3>💡 使用说明</h3>
+            <ul>
+                <li>扫描二维码直接访问专属浏览器</li>
+                <li>支持所有安卓手机浏览器（Chrome、UC、QQ、华为等）</li>
+                <li>无需安装APP，直接在浏览器中使用</li>
+                <li>支持所有主流搜索引擎</li>
+                <li>完全免费，无广告</li>
+                <li>二维码已优化，确保在各种环境下都能正确识别</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- QRCode.js 库 -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    
+    <script>
+        let qrcode = null;
+        
+        // 页面加载时生成二维码
+        window.onload = function() {
+            generateQR();
+        };
+        
+        function generateQR() {
+            const url = 'https://xiaoming-browser.github.io/';
+            
+            // 清空二维码容器
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+            
+            // 生成二维码 - 使用兼容性设置
+            qrcode = new QRCode(qrContainer, {
+                text: url,
+                width: 220,
+                height: 220,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.L // 使用最低纠错级别，提高兼容性
+            });
+            
+            // 更新URL显示
+            document.getElementById('urlDisplay').textContent = url;
+        }
+        
+        function downloadQR() {
+            const canvas = document.querySelector('#qrcode canvas');
+            if (!canvas) {
+                alert('二维码尚未生成');
+                return;
+            }
+            
+            // 创建下载链接
+            const link = document.createElement('a');
+            link.download = 'xiaoming-browser-qrcode.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        function shareQR() {
+            const canvas = document.querySelector('#qrcode canvas');
+            if (!canvas) {
+                alert('二维码尚未生成');
+                return;
+            }
+            
+            // 转换为blob
+            canvas.toBlob(function(blob) {
+                if (navigator.share && navigator.canShare({ files: [new File([blob], 'qrcode.png', { type: 'image/png' })] })) {
+                    // 使用系统分享功能
+                    const file = new File([blob], 'qrcode.png', { type: 'image/png' });
+                    navigator.share({
+                        title: '小铭的专属浏览器',
+                        text: '扫描二维码访问专属浏览器',
+                        files: [file]
+                    }).catch(console.error);
+                } else {
+                    // 降级方案：复制链接
+                    const url = document.getElementById('urlDisplay').textContent;
+                    navigator.clipboard.writeText(url).then(() => {
+                        alert('链接已复制到剪贴板！');
+                    }).catch(() => {
+                        alert('分享功能不可用，请手动复制链接');
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>

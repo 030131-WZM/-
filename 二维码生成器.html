@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二维码生成器 - 小铭的专属浏览器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .input-section {
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .generate-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .generate-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .qr-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .qr-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        
+        #qrcode {
+            display: inline-block;
+        }
+        
+        .download-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .download-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+        
+        .download-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .download-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .usage-tips {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .usage-tips h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .usage-tips ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .usage-tips li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.5;
+        }
+        
+        .usage-tips li:before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+        }
+        
+        .preset-urls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .preset-btn {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .preset-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 二维码生成器</h1>
+            <p>为小铭的专属浏览器生成访问二维码</p>
+        </div>
+        
+        <div class="input-section">
+            <div class="input-group">
+                <label for="urlInput">网站地址：</label>
+                <input type="text" id="urlInput" placeholder="请输入要生成二维码的网址" 
+                       value="https://your-username.github.io/xiaoming-browser/">
+            </div>
+            
+            <div class="preset-urls">
+                <button class="preset-btn" onclick="setPresetUrl('https://your-username.github.io/xiaoming-browser/')">
+                    GitHub Pages 示例
+                </button>
+                <button class="preset-btn" onclick="setPresetUrl('https://xiaoming-browser.netlify.app/')">
+                    Netlify 示例
+                </button>
+                <button class="preset-btn" onclick="setPresetUrl('https://xiaoming-browser.vercel.app/')">
+                    Vercel 示例
+                </button>
+            </div>
+            
+            <button class="generate-btn" onclick="generateQR()">🔄 生成二维码</button>
+        </div>
+        
+        <div class="qr-section">
+            <div class="qr-container">
+                <div id="qrcode">
+                    <div style="text-align: center; padding: 50px; color: #999;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">📱</div>
+                        <div>点击上方按钮生成二维码</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="download-section">
+                <button class="download-btn" id="downloadBtn" onclick="downloadQR()" disabled>
+                    📥 下载二维码
+                </button>
+                <button class="download-btn" id="shareBtn" onclick="shareQR()" disabled>
+                    📤 分享二维码
+                </button>
+            </div>
+        </div>
+        
+        <div class="usage-tips">
+            <h3>💡 使用提示</h3>
+            <ul>
+                <li>生成二维码后，安卓用户可以扫描二维码直接访问网站</li>
+                <li>将二维码保存到手机相册，方便随时访问</li>
+                <li>可以将二维码分享给朋友，让他们也使用专属浏览器</li>
+                <li>建议使用高对比度的二维码，确保扫描成功率</li>
+                <li>二维码可以打印出来贴在显眼位置</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- QRCode.js 库 -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    
+    <script>
+        let qrcode = null;
+        let currentQRCode = null;
+        
+        function setPresetUrl(url) {
+            document.getElementById('urlInput').value = url;
+        }
+        
+        function generateQR() {
+            const url = document.getElementById('urlInput').value.trim();
+            
+            if (!url) {
+                alert('请输入要生成二维码的网址');
+                return;
+            }
+            
+            // 验证URL格式
+            try {
+                new URL(url);
+            } catch (e) {
+                alert('请输入有效的网址格式');
+                return;
+            }
+            
+            // 清空之前的二维码
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+            
+            // 生成新的二维码
+            qrcode = new QRCode(qrContainer, {
+                text: url,
+                width: 256,
+                height: 256,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            
+            // 启用下载按钮
+            document.getElementById('downloadBtn').disabled = false;
+            document.getElementById('shareBtn').disabled = false;
+            
+            // 显示成功消息
+            setTimeout(() => {
+                alert('二维码生成成功！');
+            }, 500);
+        }
+        
+        function downloadQR() {
+            const canvas = document.querySelector('#qrcode canvas');
+            if (!canvas) {
+                alert('请先生成二维码');
+                return;
+            }
+            
+            // 创建下载链接
+            const link = document.createElement('a');
+            link.download = 'xiaoming-browser-qrcode.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        function shareQR() {
+            const canvas = document.querySelector('#qrcode canvas');
+            if (!canvas) {
+                alert('请先生成二维码');
+                return;
+            }
+            
+            // 转换为blob
+            canvas.toBlob(function(blob) {
+                if (navigator.share && navigator.canShare({ files: [new File([blob], 'qrcode.png', { type: 'image/png' })] })) {
+                    // 使用系统分享功能
+                    const file = new File([blob], 'qrcode.png', { type: 'image/png' });
+                    navigator.share({
+                        title: '小铭的专属浏览器',
+                        text: '扫描二维码访问专属浏览器',
+                        files: [file]
+                    }).catch(console.error);
+                } else {
+                    // 降级方案：复制到剪贴板
+                    navigator.clipboard.writeText(document.getElementById('urlInput').value).then(() => {
+                        alert('链接已复制到剪贴板！');
+                    }).catch(() => {
+                        alert('分享功能不可用，请手动复制链接');
+                    });
+                }
+            });
+        }
+        
+        // 页面加载时自动生成示例二维码
+        window.onload = function() {
+            generateQR();
+        };
+    </script>
+</body>
+</html>

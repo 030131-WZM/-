@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索结果 - 我的浏览器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 2em;
+        }
+        
+        .back-btn {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: #5a6fd8;
+        }
+        
+        .search-info {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-query {
+            font-size: 1.2em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .search-stats {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .results-container {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .search-result {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .search-result:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .result-title {
+            color: #667eea;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .result-title:hover {
+            text-decoration: underline;
+        }
+        
+        .result-url {
+            color: #0066cc;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .result-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .result-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .result-btn {
+            padding: 8px 16px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            text-decoration: none;
+            color: #333;
+        }
+        
+        .result-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .no-results {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .no-results h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .no-results p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .try-again {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .try-again:hover {
+            background: #5a6fd8;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            .search-result {
+                padding: 15px;
+            }
+            
+            .result-actions {
+                flex-direction: column;
+            }
+            
+            .result-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 搜索结果</h1>
+            <button class="back-btn" onclick="goBack()">← 返回主页</button>
+        </div>
+        
+        <div class="search-info">
+            <div class="search-query" id="searchQuery"></div>
+            <div class="search-stats" id="searchStats"></div>
+        </div>
+        
+        <div class="results-container" id="resultsContainer">
+            <!-- 搜索结果将在这里动态生成 -->
+        </div>
+    </div>
+    
+    <script>
+        // 获取URL参数
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+        
+        // 模拟搜索结果
+        function generateSearchResults(query) {
+            const mockResults = [
+                {
+                    title: `${query} - 相关信息`,
+                    url: `https://example.com/${query}`,
+                    description: `这是关于"${query}"的详细信息。我们为您提供最全面、最权威的相关资料，帮助您快速了解所需内容。`
+                },
+                {
+                    title: `${query} - 最新动态`,
+                    url: `https://news.example.com/${query}`,
+                    description: `获取关于"${query}"的最新资讯和动态。我们为您整理了最新的相关新闻和报道。`
+                },
+                {
+                    title: `${query} - 专业指南`,
+                    url: `https://guide.example.com/${query}`,
+                    description: `专业详细的${query}指南，包含实用的技巧和建议，帮助您更好地了解和应用相关知识。`
+                },
+                {
+                    title: `${query} - 用户评价`,
+                    url: `https://review.example.com/${query}`,
+                    description: `查看其他用户对"${query}"的评价和反馈，了解真实的使用体验和推荐。`
+                },
+                {
+                    title: `${query} - 相关资源`,
+                    url: `https://resources.example.com/${query}`,
+                    description: `收集了关于"${query}"的相关资源、工具和链接，方便您进一步探索和学习。`
+                }
+            ];
+            
+            return mockResults;
+        }
+        
+        // 初始化页面
+        function initializePage() {
+            const query = getUrlParameter('q');
+            
+            if (query) {
+                document.getElementById('searchQuery').textContent = `搜索: "${decodeURIComponent(query)}"`;
+                document.getElementById('searchStats').textContent = `找到约 5 个相关结果`;
+                
+                const results = generateSearchResults(query);
+                displayResults(results);
+            } else {
+                showNoResults();
+            }
+        }
+        
+        // 显示搜索结果
+        function displayResults(results) {
+            const container = document.getElementById('resultsContainer');
+            
+            results.forEach(result => {
+                const resultElement = document.createElement('div');
+                resultElement.className = 'search-result';
+                resultElement.innerHTML = `
+                    <a href="${result.url}" class="result-title" target="_blank">${result.title}</a>
+                    <a href="${result.url}" class="result-url" target="_blank">${result.url}</a>
+                    <div class="result-description">${result.description}</div>
+                    <div class="result-actions">
+                        <a href="${result.url}" class="result-btn" target="_blank">🔗 打开链接</a>
+                        <button class="result-btn" onclick="copyLink('${result.url}')">📋 复制链接</button>
+                        <button class="result-btn" onclick="shareResult('${result.title}', '${result.url}')">📤 分享</button>
+                    </div>
+                `;
+                container.appendChild(resultElement);
+            });
+        }
+        
+        // 显示无结果
+        function showNoResults() {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = `
+                <div class="no-results">
+                    <h3>😔 没有找到相关结果</h3>
+                    <p>请尝试使用不同的关键词或检查拼写是否正确</p>
+                    <button class="try-again" onclick="goBack()">返回主页</button>
+                </div>
+            `;
+        }
+        
+        // 返回主页
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+        
+        // 复制链接
+        function copyLink(url) {
+            navigator.clipboard.writeText(url).then(() => {
+                alert('链接已复制到剪贴板！');
+            }).catch(() => {
+                alert('复制失败，请手动复制链接');
+            });
+        }
+        
+        // 分享结果
+        function shareResult(title, url) {
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    url: url
+                }).then(() => {
+                    console.log('分享成功');
+                }).catch(() => {
+                    console.log('分享取消');
+                });
+            } else {
+                alert('您的浏览器不支持分享功能，请手动复制链接分享');
+            }
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>

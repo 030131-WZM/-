@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小铭的专属浏览器 - 移动端访问</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .qr-section {
+            margin-bottom: 30px;
+        }
+        
+        .qr-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .qr-text {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .url-display {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 5px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .instructions {
+            text-align: left;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .instructions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .instructions li:before {
+            content: "📱";
+            position: absolute;
+            left: 0;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌍 小铭的专属浏览器</h1>
+            <p>移动端访问指南 - 随时随地享受专属浏览体验</p>
+        </div>
+        
+        <div class="qr-section">
+            <div class="qr-container">
+                <div class="qr-code">
+                    二维码将在这里显示<br>
+                    （请先部署到云端）
+                </div>
+                <div class="qr-text">扫描二维码快速访问</div>
+            </div>
+            
+            <div class="url-display" id="urlDisplay">
+                https://your-username.github.io/xiaoming-browser/
+            </div>
+            
+            <a href="#" class="btn" onclick="copyUrl()">📋 复制链接</a>
+            <a href="#" class="btn btn-secondary" onclick="shareUrl()">📤 分享链接</a>
+        </div>
+        
+        <div class="instructions">
+            <h3>📱 安卓端使用方法</h3>
+            <ul>
+                <li>在手机浏览器中输入上方网址</li>
+                <li>点击浏览器菜单按钮（⋮）</li>
+                <li>选择"添加到主屏幕"</li>
+                <li>这样就可以像APP一样使用</li>
+                <li>支持所有主流搜索引擎</li>
+                <li>完全免费，无需注册</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p>💡 小贴士：建议使用Chrome或Firefox浏览器获得最佳体验</p>
+            <p>🔒 隐私声明：所有搜索请求均直接发送到搜索引擎，我们不会记录您的任何信息</p>
+        </div>
+    </div>
+    
+    <script>
+        // 模拟二维码生成
+        function generateQRCode() {
+            // 这里应该集成真实的二维码生成库
+            // 暂时显示占位符
+            document.querySelector('.qr-code').innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 10px;">📱</div>
+                    <div>二维码占位符</div>
+                    <div style="font-size: 12px; color: #999; margin-top: 10px;">
+                        部署后显示真实二维码
+                    </div>
+                </div>
+            `;
+        }
+        
+        // 复制链接
+        function copyUrl() {
+            const url = document.getElementById('urlDisplay').textContent;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('链接已复制到剪贴板！');
+            }).catch(() => {
+                // 降级方案
+                const textArea = document.createElement('textarea');
+                textArea.value = url;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('链接已复制到剪贴板！');
+            });
+        }
+        
+        // 分享链接
+        function shareUrl() {
+            const url = document.getElementById('urlDisplay').textContent;
+            if (navigator.share) {
+                navigator.share({
+                    title: '小铭的专属浏览器',
+                    text: '快来体验我的专属浏览器！',
+                    url: url
+                });
+            } else {
+                // 降级方案
+                copyUrl();
+            }
+        }
+        
+        // 页面加载时生成二维码
+        window.onload = function() {
+            generateQRCode();
+        };
+    </script>
+</body>
+</html>
